@@ -41,9 +41,27 @@ fig_resp = px.bar(df_resp, x="Responsavel", y="Andamento", title="Média de Anda
 st.plotly_chart(fig_resp, use_container_width=True)
 
 # Gráfico de Pizza por Faixa de Andamento
-faixas = pd.cut(df_filtrado["Andamento"], bins=[-1, 0, 50, 80, 100], labels=["0%", "1-50%", "51-80%", "81-100%"])
-fig_pizza = px.pie(faixas.value_counts().reset_index(), names="index", values="count", title="Distribuição por Faixa de Andamento")
-st.plotly_chart(fig_pizza, use_container_width=True)
+faixas = pd.cut(
+    df_filtrado["Andamento"],
+    bins=[-1, 0, 50, 80, 100],
+    labels=["0%", "1-50%", "51-80%", "81-100%"]
+)
+
+contagem_faixas = faixas.value_counts().reset_index()
+contagem_faixas.columns = ["Faixa", "Total"]
+
+# Só plota se houver dados
+if not contagem_faixas.empty:
+    fig_pizza = px.pie(
+        contagem_faixas,
+        names="Faixa",
+        values="Total",
+        title="Distribuição por Faixa de Andamento"
+    )
+    st.plotly_chart(fig_pizza, use_container_width=True)
+else:
+    st.warning("Nenhum dado para exibir na pizza de andamento.")
+
 
 # Tabela detalhada
 st.subheader("Tarefas em Andamento")
