@@ -1,0 +1,7 @@
+
+# Arquivos do Python
+__pycache__/
+*.pyc
+
+# Dados locais
+*.csv
